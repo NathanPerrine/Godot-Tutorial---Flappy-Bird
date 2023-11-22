@@ -1,3 +1,56 @@
-[gd_scene format=3 uid="uid://6chje8w22b6p"]
+[gd_scene load_steps=8 format=3 uid="uid://6chje8w22b6p"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://cwwe6wgcq4417" path="res://Flappy Bird Assets 1.5/Flappy Bird Assets/Player/bird3.png" id="1_ntjxb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_72wfd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15e5x"]
+atlas = ExtResource("1_ntjxb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_epogh"]
+atlas = ExtResource("1_ntjxb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2s2ew"]
+atlas = ExtResource("1_ntjxb")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g6jyj"]
+atlas = ExtResource("1_ntjxb")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3a2df"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15e5x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_epogh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2s2ew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g6jyj")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 5.0
+}]
+
+[node name="World" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(17, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_72wfd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D"]
+sprite_frames = SubResource("SpriteFrames_3a2df")
+animation = &"Fly"
+autoplay = "Fly"
+frame = 3
+frame_progress = 0.374989

@@ -52,15 +52,27 @@ script/source = "extends ParallaxBackground
 
 
 @export var scrollSpeed:int = 0
+@onready var pipesScene = preload(\"res://pipes.tscn\")
+
+@export var pipesList = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	spawn()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	self.scroll_base_offset.x -= scrollSpeed*delta
+
+func spawn():
+	var pipes = pipesScene.instantiate()
+	add_child(pipes)
+	pipesList.push_back(pipes)
+#	print(pipesList)
+
+func _on_timer_timeout():
+	spawn()
 "
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nwkgv"]
@@ -481,7 +493,7 @@ sources/0 = SubResource("TileSetAtlasSource_nwkgv")
 [node name="World" type="Node2D"]
 
 [node name="Bird" type="RigidBody2D" parent="."]
-position = Vector2(35, 134)
+position = Vector2(85, 158)
 script = ExtResource("1_6qh0w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bird"]
@@ -513,4 +525,9 @@ tile_set = SubResource("TileSet_s8vag")
 format = 2
 layer_0/tile_data = PackedInt32Array(1376256, 65536, 1, 1376269, 196608, 1, 1376257, 131072, 1, 1376258, 131072, 1, 1376259, 131072, 1, 1376260, 131072, 1, 1376261, 131072, 1, 1376262, 131072, 1, 1376263, 131072, 1, 1376264, 131072, 1, 1376265, 131072, 1, 1376266, 131072, 1, 1376267, 131072, 1, 1376268, 131072, 1, 1441792, 65536, 2, 1507329, 131072, 2, 1507330, 131072, 2, 1507331, 131072, 2, 1507332, 131072, 2, 1507333, 131072, 2, 1507334, 131072, 2, 1507335, 131072, 2, 1441799, 131072, 2, 1441800, 131072, 2, 1441798, 131072, 2, 1441797, 131072, 2, 1441796, 131072, 2, 1441795, 131072, 2, 1441794, 131072, 2, 1441793, 131072, 2, 1507328, 65536, 2, 1507336, 131072, 2, 1507337, 131072, 2, 1507338, 131072, 2, 1507339, 131072, 2, 1507340, 131072, 2, 1507341, 196608, 2, 1441805, 196608, 2, 1441804, 131072, 2, 1441803, 131072, 2, 1441802, 131072, 2, 1441801, 131072, 2)
 
+[node name="Timer" type="Timer" parent="ParallaxBackground"]
+wait_time = 2.0
+autostart = true
+
 [connection signal="body_entered" from="Bird/Area2D" to="Bird" method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="ParallaxBackground/Timer" to="ParallaxBackground" method="_on_timer_timeout"]

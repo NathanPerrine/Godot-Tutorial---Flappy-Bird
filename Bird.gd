@@ -1,13 +1,12 @@
 extends RigidBody2D
 
-@onready var pipes = $"../ParallaxBackground"
-var pipesList = []
+#@onready var pipes = $"../ParallaxBackground"
+#var pipesList = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pipesList = pipes.pipesList
+#	pipesList = pipes.pipesList
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -21,7 +20,7 @@ func _input(event):
 			$AnimatedSprite2D.play("Fly")
 
 ## Called when hit detected, creates a 'bounce' and deletes the bird
-func _hit_detected(x, y):
+func _bonk(x, y):
 	self.set_linear_velocity(Vector2(x, y))
 	await get_tree().create_timer(0.25).timeout
 	self.queue_free()
@@ -32,14 +31,13 @@ func _on_area_2d_body_entered(body):
 	
 	match body.name:
 		"Floor":
-			_hit_detected(0, -150)
-
+			_bonk(0, -150)
 		"Pipes":
-			_hit_detected(-150, 0)
+			_bonk(-150, 0)
 			
-	for pipe in pipesList:
-		if body.name in str(pipe):
-			_hit_detected(-150, 0)
+	if "wall" in body:
+		_bonk(-150, 0)
+#	for pipe in pipesList:
+#		if body.name in str(pipe):
+#			_bonk(-150, 0)
 	
-	
-#

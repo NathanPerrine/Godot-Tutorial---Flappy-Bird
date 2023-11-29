@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://6chje8w22b6p"]
+[gd_scene load_steps=16 format=3 uid="uid://6chje8w22b6p"]
 
 [ext_resource type="Script" path="res://Bird.gd" id="1_6qh0w"]
 [ext_resource type="Texture2D" uid="uid://cwwe6wgcq4417" path="res://Flappy Bird Assets 1.5/Flappy Bird Assets/Player/bird3.png" id="1_ntjxb"]
 [ext_resource type="Texture2D" uid="uid://de8nx2stxwnd5" path="res://Flappy Bird Assets 1.5/Flappy Bird Assets/Background/Background2.png" id="3_dd5m6"]
 [ext_resource type="Texture2D" uid="uid://euivq0rdngbr" path="res://Flappy Bird Assets 1.5/Flappy Bird Assets/Tileset/Style 1/TileStyle1.png" id="4_aq1ky"]
+[ext_resource type="Script" path="res://pointsLabel.tres.gd" id="5_xga0u"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_72wfd"]
 radius = 6.0
@@ -54,22 +55,18 @@ script/source = "extends ParallaxBackground
 @export var scrollSpeed:int = 0
 @onready var pipesScene = preload(\"res://pipes.tscn\")
 
-@export var pipesList = []
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	spawn()
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	self.scroll_base_offset.x -= scrollSpeed*delta
 
 func spawn():
-	var pipes = pipesScene.instantiate()
-	add_child(pipes)
-	pipesList.push_back(pipes)
-#	print(pipesList)
+	var pipesTemp = pipesScene.instantiate()
+	pipesTemp.name = \"Pipes\"
+	add_child(pipesTemp)
 
 func _on_timer_timeout():
 	spawn()
@@ -493,7 +490,7 @@ sources/0 = SubResource("TileSetAtlasSource_nwkgv")
 [node name="World" type="Node2D"]
 
 [node name="Bird" type="RigidBody2D" parent="."]
-position = Vector2(85, 158)
+position = Vector2(49, 160)
 script = ExtResource("1_6qh0w")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bird"]
@@ -528,6 +525,51 @@ layer_0/tile_data = PackedInt32Array(1376256, 65536, 1, 1376269, 196608, 1, 1376
 [node name="Timer" type="Timer" parent="ParallaxBackground"]
 wait_time = 2.0
 autostart = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="UI"]
+clip_contents = true
+offset_left = 7.0
+offset_top = 10.0
+offset_right = 44.0
+offset_bottom = 36.0
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 1.0
+offset_top = -173.0
+offset_right = 1.0
+offset_bottom = -173.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Score" type="Label" parent="UI/Control/MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "1000000000"
+vertical_alignment = 1
+script = ExtResource("5_xga0u")
 
 [connection signal="body_entered" from="Bird/Area2D" to="Bird" method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="ParallaxBackground/Timer" to="ParallaxBackground" method="_on_timer_timeout"]

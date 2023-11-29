@@ -1,5 +1,6 @@
 extends TileMap
 
+var wall
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -22,3 +23,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	position.x -= 60*delta
+
+
+func _on_area_2d_body_entered(body):
+	if "Bird" in body.name:
+		Global.points += 1
+		print(Global.points)
